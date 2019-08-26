@@ -1,0 +1,1060 @@
+SQL> 
+SQL> DROP SEQUENCE "Admissions_ad_date/time_SEQ" ;
+
+Sequence "Admissions_ad_date/time_SEQ" dropped.
+
+SQL> 
+SQL> DROP SEQUENCE admissions_pat_id_seq ;
+
+Sequence ADMISSIONS_PAT_ID_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE admissions_sp_doc_id_seq ;
+
+Sequence ADMISSIONS_SP_DOC_ID_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE admissions_ad_id_seq ;
+
+Sequence ADMISSIONS_AD_ID_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE bed_bed_no_seq ;
+
+Sequence BED_BED_NO_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE bed_ward_code_seq ;
+
+Sequence BED_WARD_CODE_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE bed_assignments_ad_id_seq ;
+
+Sequence BED_ASSIGNMENTS_AD_ID_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE cost_centre_centre_code_seq ;
+
+Sequence COST_CENTRE_CENTRE_CODE_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE dcotors_doc_id_seq ;
+
+Sequence DCOTORS_DOC_ID_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE dcotors_doc_phone_seq ;
+
+Sequence DCOTORS_DOC_PHONE_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE items_required_quantity_seq ;
+
+Sequence ITEMS_REQUIRED_QUANTITY_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE items_required_total_item_char ;
+
+Sequence ITEMS_REQUIRED_TOTAL_ITEM_CHAR dropped.
+
+SQL> 
+SQL> DROP SEQUENCE items_required_ad_id_seq ;
+
+Sequence ITEMS_REQUIRED_AD_ID_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE nursing_staff_nurse_id_seq ;
+
+Sequence NURSING_STAFF_NURSE_ID_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE patient_pat_id_seq ;
+
+Sequence PATIENT_PAT_ID_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE procedures_details_car_doc_id ;
+
+Sequence PROCEDURES_DETAILS_CAR_DOC_ID dropped.
+
+SQL> 
+SQL> DROP SEQUENCE procedures_details_req_doc_id ;
+
+Sequence PROCEDURES_DETAILS_REQ_DOC_ID dropped.
+
+SQL> 
+SQL> DROP SEQUENCE procedures_details_pro_code ;
+
+Sequence PROCEDURES_DETAILS_PRO_CODE dropped.
+
+SQL> 
+SQL> DROP SEQUENCE procedures_details_ad_id_seq ;
+
+Sequence PROCEDURES_DETAILS_AD_ID_SEQ dropped.
+
+SQL> 
+SQL> DROP SEQUENCE ward_ward_code_seq;
+
+Sequence WARD_WARD_CODE_SEQ dropped.
+
+SQL> 
+SQL> DROP TABLE admissions CASCADE CONSTRAINTS;
+
+Table ADMISSIONS dropped.
+
+SQL> 
+SQL> DROP TABLE allocation CASCADE CONSTRAINTS;
+
+Table ALLOCATION dropped.
+
+SQL> 
+SQL> DROP TABLE bed CASCADE CONSTRAINTS;
+
+Table BED dropped.
+
+SQL> 
+SQL> DROP TABLE bed_assignments CASCADE CONSTRAINTS;
+
+Table BED_ASSIGNMENTS dropped.
+
+SQL> 
+SQL> DROP TABLE cost_centre CASCADE CONSTRAINTS;
+
+Table COST_CENTRE dropped.
+
+SQL> 
+SQL> DROP TABLE dcotors CASCADE CONSTRAINTS;
+
+Table DCOTORS dropped.
+
+SQL> 
+SQL> DROP TABLE "Doctor's_Specialisation" CASCADE CONSTRAINTS;
+
+Table "Doctor's_Specialisation" dropped.
+
+SQL> 
+SQL> DROP TABLE items CASCADE CONSTRAINTS;
+
+Table ITEMS dropped.
+
+SQL> 
+SQL> DROP TABLE items_required CASCADE CONSTRAINTS;
+
+Table ITEMS_REQUIRED dropped.
+
+SQL> 
+SQL> DROP TABLE nursing_staff CASCADE CONSTRAINTS;
+
+Table NURSING_STAFF dropped.
+
+SQL> 
+SQL> DROP TABLE patient CASCADE CONSTRAINTS;
+
+Table PATIENT dropped.
+
+SQL> 
+SQL> DROP TABLE procedures CASCADE CONSTRAINTS;
+
+Table PROCEDURES dropped.
+
+SQL> 
+SQL> DROP TABLE procedures_details CASCADE CONSTRAINTS;
+
+Table PROCEDURES_DETAILS dropped.
+
+SQL> 
+SQL> DROP TABLE specialisation CASCADE CONSTRAINTS;
+
+Table SPECIALISATION dropped.
+
+SQL> 
+SQL> DROP TABLE ward CASCADE CONSTRAINTS;
+
+Table WARD dropped.
+
+SQL> 
+SQL> CREATE TABLE admissions (
+  2      "ad_date/time"   DATE NOT NULL,
+  3      pat_id           NUMBER(6) NOT NULL,
+  4      sp_doc_id        NUMBER(4) NOT NULL,
+  5      ad_id            NUMBER(15) NOT NULL
+  6  );
+
+Table ADMISSIONS created.
+
+SQL> 
+SQL> COMMENT ON COLUMN admissions."ad_date/time" IS
+  2      'the date and time of admission';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN admissions.pat_id IS
+  2      'pat_id:patient ID';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN admissions.sp_doc_id IS
+  2      'doctor''s ID';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN admissions.ad_id IS
+  2      'creat a surrpgate key';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE admissions ADD CONSTRAINT admissions_pk PRIMARY KEY ( ad_id );
+
+Table ADMISSIONS altered.
+
+SQL> 
+SQL> ALTER TABLE admissions ADD CONSTRAINT "unique" UNIQUE ( "ad_date/time",
+  2                                                          pat_id );
+
+Table ADMISSIONS altered.
+
+SQL> 
+SQL> CREATE TABLE allocation (
+  2      date_assigned    DATE NOT NULL,
+  3      date_completed   DATE NOT NULL,
+  4      ward_code        NUMBER(4) NOT NULL,
+  5      nurse_id         NUMBER(10) NOT NULL
+  6  );
+
+Table ALLOCATION created.
+
+SQL> 
+SQL> COMMENT ON COLUMN allocation.date_assigned IS
+  2      'the initial date that a nurse is assigned to word in a ward';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN allocation.date_completed IS
+  2      'when they finish an allocation';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN allocation.ward_code IS
+  2      'code of ward';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN allocation.nurse_id IS
+  2      'nurse''s ID';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE allocation ADD CONSTRAINT allocation_pk PRIMARY KEY ( nurse_id,
+  2                                                                    date_assigned );
+
+Table ALLOCATION altered.
+
+SQL> 
+SQL> CREATE TABLE bed (
+  2      bed_no      CHAR(10 CHAR) NOT NULL,
+  3      bed_phone   NUMBER(15),
+  4      bed_type    VARCHAR2(50 CHAR) NOT NULL,
+  5      ward_code   NUMBER(4) NOT NULL
+  6  );
+
+Table BED created.
+
+SQL> 
+SQL> ALTER TABLE bed
+  2      ADD CONSTRAINT choose_type CHECK ( bed_type IN (
+  3          'adjustable',
+  4          'fixed'
+  5      ) );
+
+Table BED altered.
+
+SQL> 
+SQL> COMMENT ON COLUMN bed.bed_no IS
+  2      'bed_no:number of bed';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN bed.bed_phone IS
+  2      'bed_no:bedside telephone number';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN bed.bed_type IS
+  2      'bed type';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN bed.ward_code IS
+  2      'code of ward';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE bed ADD CONSTRAINT bed_pk PRIMARY KEY ( ward_code,
+  2                                                      bed_no );
+
+Table BED altered.
+
+SQL> 
+SQL> CREATE TABLE bed_assignments (
+  2      "ass_date/time"   DATE NOT NULL,
+  3      ward_code         NUMBER(4) NOT NULL,
+  4      ad_id             NUMBER(15) NOT NULL,
+  5      bed_no            CHAR(10 CHAR) NOT NULL
+  6  );
+
+Table BED_ASSIGNMENTS created.
+
+SQL> 
+SQL> COMMENT ON COLUMN bed_assignments."ass_date/time" IS
+  2      'ass_date/time:the date and time of assignments';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN bed_assignments.ward_code IS
+  2      'code of ward';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN bed_assignments.ad_id IS
+  2      'creat a surrpgate key';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN bed_assignments.bed_no IS
+  2      'bed_no:number of bed';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE bed_assignments ADD CONSTRAINT bed_assignments_pk PRIMARY KEY ( ad_id,
+  2                                                                              "ass_date/time" );
+
+Table BED_ASSIGNMENTS altered.
+
+SQL> 
+SQL> CREATE TABLE cost_centre (
+  2      centre_code     NUMBER(10) NOT NULL,
+  3      centre_title    VARCHAR2(50 CHAR) NOT NULL,
+  4      centre_maname   VARCHAR2(50 CHAR) NOT NULL
+  5  );
+
+Table COST_CENTRE created.
+
+SQL> 
+SQL> COMMENT ON COLUMN cost_centre.centre_code IS
+  2      'centre code';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN cost_centre.centre_title IS
+  2      'title of centre';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN cost_centre.centre_maname IS
+  2      'centre managers name';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE cost_centre ADD CONSTRAINT cost_centre_pk PRIMARY KEY ( centre_code );
+
+Table COST_CENTRE altered.
+
+SQL> 
+SQL> CREATE TABLE dcotors (
+  2      doc_id      NUMBER(4) NOT NULL,
+  3      doc_fname   VARCHAR2(50 CHAR) NOT NULL,
+  4      doc_lname   VARCHAR2(50 CHAR) NOT NULL,
+  5      doc_phone   NUMBER(15) NOT NULL
+  6  );
+
+Table DCOTORS created.
+
+SQL> 
+SQL> COMMENT ON COLUMN dcotors.doc_id IS
+  2      'doctor''s ID';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN dcotors.doc_fname IS
+  2      'first name of doctor';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN dcotors.doc_lname IS
+  2      'last name of doctor';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN dcotors.doc_phone IS
+  2      'phone number of doctors';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE dcotors ADD CONSTRAINT dcotors_pk PRIMARY KEY ( doc_id );
+
+Table DCOTORS altered.
+
+SQL> 
+SQL> CREATE TABLE "Doctor's_Specialisation" (
+  2      doc_id     NUMBER(4) NOT NULL,
+  3      spe_name   VARCHAR2(50 CHAR) NOT NULL
+  4  );
+
+Table "Doctor's_Specialisation" created.
+
+SQL> 
+SQL> COMMENT ON COLUMN "Doctor's_Specialisation".doc_id IS
+  2      'doctor''s ID';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN "Doctor's_Specialisation".spe_name IS
+  2      'name of specialisation';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE "Doctor's_Specialisation" ADD CONSTRAINT "Doctor's_Specialisation_PK" PRIMARY KEY ( doc_id,
+  2                                                                                                  spe_name );
+
+Table "Doctor's_Specialisation" altered.
+
+SQL> 
+SQL> CREATE TABLE items (
+  2      item_code        VARCHAR2(5 CHAR) NOT NULL,
+  3      item_descr       VARCHAR2(50 CHAR) NOT NULL,
+  4      item_currstock   NUMBER(10) NOT NULL,
+  5      item_price       NUMBER(10, 2) NOT NULL,
+  6      centre_code      NUMBER(10) NOT NULL
+  7  );
+
+Table ITEMS created.
+
+SQL> 
+SQL> ALTER TABLE items ADD CONSTRAINT "chk_item price" CHECK ( item_price >= 0 );
+
+Table ITEMS altered.
+
+SQL> 
+SQL> COMMENT ON COLUMN items.item_code IS
+  2      'code of item';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN items.item_descr IS
+  2      'item description';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN items.item_currstock IS
+  2      'the current stock of item';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN items.item_price IS
+  2      'item price';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN items.centre_code IS
+  2      'centre code';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE items ADD CONSTRAINT items_pk PRIMARY KEY ( item_code );
+
+Table ITEMS altered.
+
+SQL> 
+SQL> CREATE TABLE items_required (
+  2      quantity            NUMBER(5) NOT NULL,
+  3      total_item_charge   NUMBER(10, 2) NOT NULL,
+  4      item_code           VARCHAR2(5 CHAR) NOT NULL,
+  5      "pro_date/time"     DATE NOT NULL,
+  6      ad_id               NUMBER(15) NOT NULL
+  7  );
+
+Table ITEMS_REQUIRED created.
+
+SQL> 
+SQL> ALTER TABLE items_required ADD CONSTRAINT chk_quantity CHECK ( quantity > 0 );
+
+Table ITEMS_REQUIRED altered.
+
+SQL> 
+SQL> ALTER TABLE items_required ADD CONSTRAINT chk_itemscharge CHECK ( total_item_charge > 0 );
+
+Table ITEMS_REQUIRED altered.
+
+SQL> 
+SQL> COMMENT ON COLUMN items_required.quantity IS
+  2      'quantities of the item';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN items_required.total_item_charge IS
+  2      'charge of total items';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN items_required.item_code IS
+  2      'code of item';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN items_required."pro_date/time" IS
+  2      'the date and time of procedures';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN items_required.ad_id IS
+  2      'creat a surrpgate key';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE items_required ADD CONSTRAINT items_required_pk PRIMARY KEY ( item_code,
+  2                                                                            quantity );
+
+Table ITEMS_REQUIRED altered.
+
+SQL> 
+SQL> CREATE TABLE nursing_staff (
+  2      nurse_id          NUMBER(10) NOT NULL,
+  3      nurse_fname       VARCHAR2(50 CHAR) NOT NULL,
+  4      nurse_lname       VARCHAR2(50 CHAR) NOT NULL,
+  5      nurse_phone       CHAR(10 CHAR) NOT NULL,
+  6      nurse_certifled   VARCHAR2(50 CHAR) NOT NULL
+  7  );
+
+Table NURSING_STAFF created.
+
+SQL> 
+SQL> ALTER TABLE nursing_staff
+  2      ADD CONSTRAINT judge_certifled CHECK ( nurse_certifled IN (
+  3          'No',
+  4          'Yes'
+  5      ) );
+
+Table NURSING_STAFF altered.
+
+SQL> 
+SQL> COMMENT ON COLUMN nursing_staff.nurse_id IS
+  2      'nurse''s ID';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN nursing_staff.nurse_fname IS
+  2      'first name of nurse';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN nursing_staff.nurse_lname IS
+  2      'last name of nurse';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN nursing_staff.nurse_phone IS
+  2      'contact number of nurse';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN nursing_staff.nurse_certifled IS
+  2      'certifled for work with children';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE nursing_staff ADD CONSTRAINT nursing_staff_pk PRIMARY KEY ( nurse_id );
+
+Table NURSING_STAFF altered.
+
+SQL> 
+SQL> CREATE TABLE patient (
+  2      pat_id          NUMBER(6) NOT NULL,
+  3      pat_fname       VARCHAR2(50 CHAR) NOT NULL,
+  4      pat_lname       VARCHAR2(50 CHAR) NOT NULL,
+  5      pat_address     VARCHAR2(50 CHAR) NOT NULL,
+  6      pat_dob         DATE NOT NULL,
+  7      pat_emerphone   NUMBER NOT NULL
+  8  );
+
+Table PATIENT created.
+
+SQL> 
+SQL> COMMENT ON COLUMN patient.pat_id IS
+  2      'pat_id:patient ID';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN patient.pat_fname IS
+  2      'pat_fname:patient''s first name';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN patient.pat_lname IS
+  2      'pat_lname:patient''s last name';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN patient.pat_address IS
+  2      'pat_address: patient address';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN patient.pat_dob IS
+  2      'pat_dob:patient''s date of birth';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN patient.pat_emerphone IS
+  2      'pat_emerphone: patient''s emergency  contact number';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE patient ADD CONSTRAINT patient_pk PRIMARY KEY ( pat_id );
+
+Table PATIENT altered.
+
+SQL> 
+SQL> CREATE TABLE procedures (
+  2      pro_code     NUMBER(10) NOT NULL,
+  3      pro_name     VARCHAR2(50 CHAR) NOT NULL,
+  4      pro_charge   NUMBER(10, 2) NOT NULL
+  5  );
+
+Table PROCEDURES created.
+
+SQL> 
+SQL> COMMENT ON COLUMN procedures.pro_code IS
+  2      'procedure''s code';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN procedures.pro_name IS
+  2      'the name of procedure';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN procedures.pro_charge IS
+  2      'procedure''s charge';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE procedures ADD CONSTRAINT procedures_pk PRIMARY KEY ( pro_code );
+
+Table PROCEDURES altered.
+
+SQL> 
+SQL> CREATE TABLE procedures_details (
+  2      "pro_date/time"   DATE NOT NULL,
+  3      car_doc_id        NUMBER(4),
+  4      req_doc_id        NUMBER(4) NOT NULL,
+  5      pro_code          NUMBER(10) NOT NULL,
+  6      ad_id             NUMBER(15) NOT NULL
+  7  );
+
+Table PROCEDURES_DETAILS created.
+
+SQL> 
+SQL> COMMENT ON COLUMN procedures_details."pro_date/time" IS
+  2      'the date and time of procedures';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN procedures_details.car_doc_id IS
+  2      'doctor''s ID';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN procedures_details.req_doc_id IS
+  2      'doctor''s ID';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN procedures_details.pro_code IS
+  2      'procedure''s code';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN procedures_details.ad_id IS
+  2      'creat a surrpgate key';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE procedures_details ADD CONSTRAINT procedures_details_pk PRIMARY KEY ( "pro_date/time",
+  2                                                                                    ad_id );
+
+Table PROCEDURES_DETAILS altered.
+
+SQL> 
+SQL> CREATE TABLE specialisation (
+  2      spe_name VARCHAR2(50 CHAR) NOT NULL
+  3  );
+
+Table SPECIALISATION created.
+
+SQL> 
+SQL> COMMENT ON COLUMN specialisation.spe_name IS
+  2      'name of specialisation';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE specialisation ADD CONSTRAINT specialisation_pk PRIMARY KEY ( spe_name );
+
+Table SPECIALISATION altered.
+
+SQL> 
+SQL> CREATE TABLE ward (
+  2      ward_code     NUMBER(4) NOT NULL,
+  3      ward_name     VARCHAR2(50 CHAR) NOT NULL,
+  4      totalno_bed   NUMBER(5) NOT NULL,
+  5      empty_bed     NUMBER(5) NOT NULL
+  6  );
+
+Table WARD created.
+
+SQL> 
+SQL> COMMENT ON COLUMN ward.ward_code IS
+  2      'code of ward';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN ward.ward_name IS
+  2      'ward''s name';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN ward.totalno_bed IS
+  2      'total number of beds in each ward';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN ward.empty_bed IS
+  2      'the number of currently available beds';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE ward ADD CONSTRAINT ward_pk PRIMARY KEY ( ward_code );
+
+Table WARD altered.
+
+SQL> 
+SQL> ALTER TABLE procedures_details
+  2      ADD CONSTRAINT admission_procedure FOREIGN KEY ( ad_id )
+  3          REFERENCES admissions ( ad_id );
+
+Table PROCEDURES_DETAILS altered.
+
+SQL> 
+SQL> ALTER TABLE bed_assignments
+  2      ADD CONSTRAINT admissions_bed_assignments FOREIGN KEY ( ad_id )
+  3          REFERENCES admissions ( ad_id );
+
+Table BED_ASSIGNMENTS altered.
+
+SQL> 
+SQL> ALTER TABLE bed_assignments
+  2      ADD CONSTRAINT bed__bed_assignments FOREIGN KEY ( ward_code,
+  3                                                        bed_no )
+  4          REFERENCES bed ( ward_code,
+  5                           bed_no );
+
+Table BED_ASSIGNMENTS altered.
+
+SQL> 
+SQL> ALTER TABLE procedures_details
+  2      ADD CONSTRAINT carryout_doctor_procedure FOREIGN KEY ( car_doc_id )
+  3          REFERENCES dcotors ( doc_id );
+
+Table PROCEDURES_DETAILS altered.
+
+SQL> 
+SQL> ALTER TABLE items
+  2      ADD CONSTRAINT cost_centre_items FOREIGN KEY ( centre_code )
+  3          REFERENCES cost_centre ( centre_code );
+
+Table ITEMS altered.
+
+SQL> 
+SQL> ALTER TABLE admissions
+  2      ADD CONSTRAINT doctor_admission FOREIGN KEY ( sp_doc_id )
+  3          REFERENCES dcotors ( doc_id );
+
+Table ADMISSIONS altered.
+
+SQL> 
+SQL> ALTER TABLE "Doctor's_Specialisation"
+  2      ADD CONSTRAINT doctor_doc_spec FOREIGN KEY ( doc_id )
+  3          REFERENCES dcotors ( doc_id );
+
+Table "Doctor's_Specialisation" altered.
+
+SQL> 
+SQL> ALTER TABLE items_required
+  2      ADD CONSTRAINT items_item_required FOREIGN KEY ( item_code )
+  3          REFERENCES items ( item_code );
+
+Table ITEMS_REQUIRED altered.
+
+SQL> 
+SQL> ALTER TABLE allocation
+  2      ADD CONSTRAINT nurse_allocation FOREIGN KEY ( nurse_id )
+  3          REFERENCES nursing_staff ( nurse_id );
+
+Table ALLOCATION altered.
+
+SQL> 
+SQL> ALTER TABLE admissions
+  2      ADD CONSTRAINT patients_admissions FOREIGN KEY ( pat_id )
+  3          REFERENCES patient ( pat_id );
+
+Table ADMISSIONS altered.
+
+SQL> 
+SQL> ALTER TABLE procedures_details
+  2      ADD CONSTRAINT procedures_pro_details FOREIGN KEY ( pro_code )
+  3          REFERENCES procedures ( pro_code );
+
+Table PROCEDURES_DETAILS altered.
+
+SQL> 
+SQL> ALTER TABLE items_required
+  2      ADD CONSTRAINT relation_7 FOREIGN KEY ( "pro_date/time",
+  3                                              ad_id )
+  4          REFERENCES procedures_details ( "pro_date/time",
+  5                                          ad_id );
+
+Table ITEMS_REQUIRED altered.
+
+SQL> 
+SQL> ALTER TABLE procedures_details
+  2      ADD CONSTRAINT request_doctor_procedure FOREIGN KEY ( req_doc_id )
+  3          REFERENCES dcotors ( doc_id );
+
+Table PROCEDURES_DETAILS altered.
+
+SQL> 
+SQL> ALTER TABLE "Doctor's_Specialisation"
+  2      ADD CONSTRAINT spec_doctor_spec FOREIGN KEY ( spe_name )
+  3          REFERENCES specialisation ( spe_name );
+
+Table "Doctor's_Specialisation" altered.
+
+SQL> 
+SQL> ALTER TABLE allocation
+  2      ADD CONSTRAINT ward_allocation FOREIGN KEY ( ward_code )
+  3          REFERENCES ward ( ward_code );
+
+Table ALLOCATION altered.
+
+SQL> 
+SQL> ALTER TABLE bed
+  2      ADD CONSTRAINT ward_bed FOREIGN KEY ( ward_code )
+  3          REFERENCES ward ( ward_code );
+
+Table BED altered.
+
+SQL> 
+SQL> CREATE SEQUENCE "Admissions_ad_date/time_SEQ" START WITH 1 NOCACHE ORDER;
+
+Sequence "Admissions_ad_date/time_SEQ" created.
+
+SQL> 
+SQL> CREATE SEQUENCE admissions_pat_id_seq START WITH 1 NOCACHE ORDER;
+
+Sequence ADMISSIONS_PAT_ID_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE admissions_sp_doc_id_seq START WITH 1 NOCACHE ORDER;
+
+Sequence ADMISSIONS_SP_DOC_ID_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE admissions_ad_id_seq START WITH 1 NOCACHE ORDER;
+
+Sequence ADMISSIONS_AD_ID_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE bed_bed_no_seq START WITH 1 NOCACHE ORDER;
+
+Sequence BED_BED_NO_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE bed_ward_code_seq START WITH 1 NOCACHE ORDER;
+
+Sequence BED_WARD_CODE_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE bed_assignments_ad_id_seq START WITH 1 NOCACHE ORDER;
+
+Sequence BED_ASSIGNMENTS_AD_ID_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE cost_centre_centre_code_seq START WITH 1 NOCACHE ORDER;
+
+Sequence COST_CENTRE_CENTRE_CODE_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE dcotors_doc_id_seq START WITH 1 NOCACHE ORDER;
+
+Sequence DCOTORS_DOC_ID_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE dcotors_doc_phone_seq START WITH 1 NOCACHE ORDER;
+
+Sequence DCOTORS_DOC_PHONE_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE items_required_quantity_seq START WITH 1 NOCACHE ORDER;
+
+Sequence ITEMS_REQUIRED_QUANTITY_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE items_required_total_item_char START WITH 1 NOCACHE ORDER;
+
+Sequence ITEMS_REQUIRED_TOTAL_ITEM_CHAR created.
+
+SQL> 
+SQL> CREATE SEQUENCE items_required_ad_id_seq START WITH 1 NOCACHE ORDER;
+
+Sequence ITEMS_REQUIRED_AD_ID_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE nursing_staff_nurse_id_seq START WITH 1 NOCACHE ORDER;
+
+Sequence NURSING_STAFF_NURSE_ID_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE patient_pat_id_seq START WITH 1 NOCACHE ORDER;
+
+Sequence PATIENT_PAT_ID_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE procedures_details_car_doc_id START WITH 1 NOCACHE ORDER;
+
+Sequence PROCEDURES_DETAILS_CAR_DOC_ID created.
+
+SQL> 
+SQL> CREATE SEQUENCE procedures_details_req_doc_id START WITH 1 NOCACHE ORDER;
+
+Sequence PROCEDURES_DETAILS_REQ_DOC_ID created.
+
+SQL> 
+SQL> CREATE SEQUENCE procedures_details_pro_code START WITH 1 NOCACHE ORDER;
+
+Sequence PROCEDURES_DETAILS_PRO_CODE created.
+
+SQL> 
+SQL> CREATE SEQUENCE procedures_details_ad_id_seq START WITH 1 NOCACHE ORDER;
+
+Sequence PROCEDURES_DETAILS_AD_ID_SEQ created.
+
+SQL> 
+SQL> CREATE SEQUENCE ward_ward_code_seq START WITH 1 NOCACHE ORDER;
+
+Sequence WARD_WARD_CODE_SEQ created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Oracle SQL Developer Data Modeler Summary Report: 
+SQL> -- 
+SQL> -- CREATE TABLE                            15
+SQL> -- CREATE INDEX                             0
+SQL> -- ALTER TABLE                             37
+SQL> -- CREATE VIEW                              0
+SQL> -- ALTER VIEW                               0
+SQL> -- CREATE PACKAGE                           0
+SQL> -- CREATE PACKAGE BODY                      0
+SQL> -- CREATE PROCEDURE                         0
+SQL> -- CREATE FUNCTION                          0
+SQL> -- CREATE TRIGGER                           0
+SQL> -- ALTER TRIGGER                            0
+SQL> -- CREATE COLLECTION TYPE                   0
+SQL> -- CREATE STRUCTURED TYPE                   0
+SQL> -- CREATE STRUCTURED TYPE BODY              0
+SQL> -- CREATE CLUSTER                           0
+SQL> -- CREATE CONTEXT                           0
+SQL> -- CREATE DATABASE                          0
+SQL> -- CREATE DIMENSION                         0
+SQL> -- CREATE DIRECTORY                         0
+SQL> -- CREATE DISK GROUP                        0
+SQL> -- CREATE ROLE                              0
+SQL> -- CREATE ROLLBACK SEGMENT                  0
+SQL> -- CREATE SEQUENCE                         20
+SQL> -- CREATE MATERIALIZED VIEW                 0
+SQL> -- CREATE MATERIALIZED VIEW LOG             0
+SQL> -- CREATE SYNONYM                           0
+SQL> -- CREATE TABLESPACE                        0
+SQL> -- CREATE USER                              0
+SQL> -- 
+SQL> -- DROP TABLESPACE                          0
+SQL> -- DROP DATABASE                            0
+SQL> -- 
+SQL> -- REDACTION POLICY                         0
+SQL> -- 
+SQL> -- ORDS DROP SCHEMA                         0
+SQL> -- ORDS ENABLE SCHEMA                       0
+SQL> -- ORDS ENABLE OBJECT                       0
+SQL> -- 
+SQL> -- ERRORS                                   0
+SQL> -- WARNINGS                                 0
+SQL> SET ECHO OFF;
